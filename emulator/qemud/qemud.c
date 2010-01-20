@@ -551,10 +551,12 @@ looper_loop( Looper*  l )
 
             hook[0]     = l->hooks[l->num_fds-1];
 
-            /* Change the handle to the event */
-            ev.events   = hook->wanted;
-            ev.data.ptr = hook;
-            epoll_ctl( l->epoll_fd, EPOLL_CTL_MOD, hook->fd, &ev );
+            /* Update the handle to the event if it not closed */
+            if (!(hook->state & HOOK_CLOSING)) {
+                ev.events   = hook->wanted;
+                ev.data.ptr = hook;
+                epoll_ctl( l->epoll_fd, EPOLL_CTL_MOD, hook->fd, &ev );
+            }
 
             l->num_fds -= 1;
         }
