@@ -542,6 +542,7 @@ looper_loop( Looper*  l )
          * the callbacks */
         for (n = 0; n < l->num_fds;) {
             LoopHook*  hook = l->hooks + n;
+            struct epoll_event ev;
 
             if (!(hook->state & HOOK_CLOSING)) {
                 n++;
@@ -549,6 +550,13 @@ looper_loop( Looper*  l )
             }
 
             hook[0]     = l->hooks[l->num_fds-1];
+
+            /* Update the handle to the event if it not closed */
+            if (!(hook->state & HOOK_CLOSING)) {
+                ev.events   = hook->wanted;
+                ev.data.ptr = hook;
+                epoll_ctl( l->epoll_fd, EPOLL_CTL_MOD, hook->fd, &ev );
+            }
             l->num_fds -= 1;
         }
     }
