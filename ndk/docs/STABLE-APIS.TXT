@@ -27,7 +27,7 @@ currently supported:
 
     android-3      -> Official Android 1.5 system images
     android-4      -> Official Android 1.6 system images
-    android-5      -> Experimental Eclair system images
+    android-5      -> Official Android 2.0 system images
 
 II. Android-3 Stable Native APIs:
 ---------------------------------
@@ -138,6 +138,29 @@ as in:
 
   LOCAL_LDLIBS := -lGLESv1_CM.so
 
+
+The '1.x' here refers to both versions 1.0 and 1.1 of the OpenGL ES APIs.
+Please note that:
+
+  - OpenGL ES 1.0 is supported on *all* Android-based devices.
+  - OpenGL ES 1.1 is fully supported only on specific devices that
+    have the corresponding GPU.
+
+This is because Android comes with a 1.0-capable software renderer that can
+be used on GPU-less devices.
+
+Developers should query the OpenGL ES version string and extension string
+to know if the current device supports the features they need. See the
+description of glGetString() in the specification to see how to do that:
+
+    http://www.khronos.org/opengles/sdk/1.1/docs/man/glGetString.xml
+
+Additionally, developers must put a <uses-feature> tag in their manifest
+file to indicate which version of OpenGL ES their application requires. See
+the documentation linked below for details:
+
+ http://developer.android.com/guide/topics/manifest/uses-feature-element.html
+
 Please note that, at the moment, native headers and libraries for the EGL APIs
 are *not* available. EGL is used to perform surface creation and flipping
 (instead of rendering). The corresponding operations must be performed in your
@@ -157,8 +180,7 @@ IV. Android-5 Stable Native APIs:
 ----------------------------------
 
 All the APIs listed below are available for developing native code that runs
-on the Eclair experimental branch, which will be used to make the next official
-platform system images.
+on Android 2.0 system images and above.
 
 
 The OpenGL ES 2.0 Library:
@@ -174,6 +196,10 @@ as in:
 
   LOCAL_LDLIBS := -lGLESv2.so
 
+Not all devices support OpenGL ES 2.0, developers should thus query the
+implementation's version and extension strings, and put a <uses-feature>
+tag in their Android manifest. See Section III above for details.
+
 Please note that, at the moment, native headers and libraries for the EGL APIs
 are *not* available. EGL is used to perform surface creation and flipping
 (instead of rendering). The corresponding operations must be performed in your
@@ -183,3 +209,8 @@ http://android-developers.blogspot.com/2009/04/introducing-glsurfaceview.html
 
 The "hello-gl2" sample application demonstrate this. It is used to draw a very
 simple triangle with the help of a vertex and fragment shaders.
+
+IMPORTANT NOTE:
+    The Android emulator does not support OpenGL ES 2.0 hardware emulation
+    at this time. Running and testing code that uses this API requires a
+    real device with such capabilities.
