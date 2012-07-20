@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-# Copy the little-endian Mips32r2-fp kernel image to .../kernel-qemu
+# Copy the little-endian Mips32-fp kernel image to .../kernel-qemu
 prebuilt/android-${TARGET_ARCH}/kernel/kernel-qemu system-images/${PLATFORM_NAME}/${TARGET_CPU_ABI}/kernel-qemu
 
 # version files for the SDK updater, from development.git
-development/sdk/images_mips-r2_source.properties   system-images/${PLATFORM_NAME}/${TARGET_CPU_ABI}/source.properties
+development/sdk/images_mips_source.properties   system-images/${PLATFORM_NAME}/${TARGET_CPU_ABI}/source.properties
